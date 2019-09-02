@@ -12,7 +12,6 @@ const createNewUser = function({username, password, name}) {
   let id = uuid()
 
   encryptedPassword = bcrypt.hashSync(password, 12);
-  console.log("password",{encryptedPassword, password})
   var user = new User(id, username, encryptedPassword, name);
 
   usersData[username] = user
@@ -44,7 +43,6 @@ const createUserSession = function({username}) {
 };
 
 const isValidToken = function({token}) {
-  console.log("[isValidToken] called")
   if (!token) {
     return false
   }
