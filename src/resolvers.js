@@ -30,10 +30,10 @@ const getMovies = function() {
 
 var createUser = function({username, password, name}) {
   if (!username || !password) {
-    throw new Error("cannot create user: missing username and password")
+    throw new Error("missing required field username or password")
   }
   if (usersData[username]) {
-    throw new Error("cannot create user: username already exists")
+    throw new Error("username already exists")
   }
   let user = {username, password, id: uuid(), name: !!name ? name : username}
   usersData[username] = user
@@ -41,9 +41,25 @@ var createUser = function({username, password, name}) {
   return {token, user}
 };
 
+var login = function({username, password}) {
+  if (!username || !password) {
+    throw new Error("missing required field username or password")
+  }
+  let user = usersData[username]
+  if (!user) {
+    throw new Error("user not found")
+  }
+  if (user.password !== password) {
+    throw new Error("incorrect password")
+  }
+  let token = uuid()
+  return {token, user}
+};
+
 const resolvers = {
     movies: getMovies,
     createUser: createUser,
+    login: login
 };
 
 module.exports = resolvers;

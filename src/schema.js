@@ -6,6 +6,7 @@ const schema = buildSchema(`
     },
     type Mutation {
         createUser(username: String, password: String): Session
+        login(username: String, password: String): Session
     }
     type User {
       id: String
