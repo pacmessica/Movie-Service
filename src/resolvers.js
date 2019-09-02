@@ -18,7 +18,8 @@ var moviesData = [
     }
 ];
 
-var usersData = [];
+var usersData = {
+};
 
 var sessionsData = {
 };
@@ -28,16 +29,21 @@ const getMovies = function() {
 };
 
 var createUser = function({username, password, name}) {
-  name = !!name ? name : username
-  let user = {username, password, id: uuid(), name}
-  usersData.push(user)
+  if (!username || !password) {
+    throw new Error("cannot create user: missing username and password")
+  }
+  if (usersData[username]) {
+    throw new Error("cannot create user: username already exists")
+  }
+  let user = {username, password, id: uuid(), name: !!name ? name : username}
+  usersData[username] = user
   let token = uuid()
   return {token, user}
 };
 
 const resolvers = {
     movies: getMovies,
-    createUser: createUser
+    createUser: createUser,
 };
 
 module.exports = resolvers;
