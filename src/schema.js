@@ -22,6 +22,7 @@ const schema = buildSchema(`
       year: Int
       rating: Int
       actors: [Actor]
+      scoutbase_rating: String
     }
 
     type Actor {

@@ -26,7 +26,16 @@ const getResolvers = function(request) {
 
   const getMovies = function() {
     let movies = getAllMovies()
-    return movies;
+    if (!request.isLoggedIn) {
+      return movies
+    }
+
+    // add random value string for scoutbase rating
+    return movies.map(function (movie) {
+      let moveWithRating = Object.assign({}, movie)
+      moveWithRating.scoutbase_rating = (Math.random()*5 + 5).toFixed(1)
+      return moveWithRating
+    });
   };
 
   return {
@@ -34,9 +43,6 @@ const getResolvers = function(request) {
       createUser: createUser,
       login: login
   };
-}
-
-
-
+};
 
 module.exports = getResolvers;
