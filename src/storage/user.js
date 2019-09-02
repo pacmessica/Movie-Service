@@ -32,19 +32,21 @@ const createUserSession = function({username}) {
     throw new Error("user not found")
   }
   let token = uuid() // TODO make more secure
-  sessionsData[username] = token
+  sessionsData[token] = username
   return token
 };
 
-// const isUserAuthenticated = function({token}) {
-//   if (!token) {
-//     return false
-//   }
-//   let session = sessionsData[token]
-//   if (!session) {
-//     return false
-//   }
-//   return true
-// };
+const isValidToken = function({token}) {
+  console.log("[isValidToken] called")
+  if (!token) {
+    return false
+  }
+  let session = sessionsData[token]
 
-module.exports = {getUserByUsername, createNewUser, createUserSession};
+  if (!session) {
+    return false
+  }
+  return true
+};
+
+module.exports = {getUserByUsername, createNewUser, createUserSession, isValidToken};

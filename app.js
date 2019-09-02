@@ -1,14 +1,20 @@
 const express = require('express');
-const express_graphql = require('express-graphql');
+const graphqlHTTP = require('express-graphql');
 const schema = require("./src/schema");
-const resolvers = require("./src/resolvers");
+const getResolvers = require("./src/resolvers");
+const auth = require("./auth");
 
-// Create an express server and a GraphQL endpoint
 var app = express();
 
-app.use('/graphql', express_graphql({
+app.use(auth)
+
+app.use(
+  '/graphql',
+  graphqlHTTP(async (request, response, graphQLParams) => ({
     schema: schema,
-    rootValue: resolvers,
-    graphiql: true
-}));
+    rootValue: await getResolvers(request),
+    graphiql: true,
+  })),
+);
+
 app.listen(4000, () => console.log('Express GraphQL Server Now Running On localhost:4000/graphql'));
