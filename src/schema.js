@@ -4,6 +4,18 @@ const schema = buildSchema(`
     type Query {
         movies: [Movie]
     },
+    type Mutation {
+        createUser(username: String, password: String): Session
+    }
+    type User {
+      id: String
+      name: String
+    }
+    type Session {
+      token: String
+      user: User
+    }
+
     type Movie {
       title: String
       year: Int

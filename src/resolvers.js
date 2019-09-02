@@ -1,4 +1,6 @@
-const moviesData = [
+const uuid = require('uuid/v4');
+
+var moviesData = [
     {
       title: "Edward Scissorhands",
       year: 1993,
@@ -16,12 +18,26 @@ const moviesData = [
     }
 ];
 
+var usersData = [];
+
+var sessionsData = {
+};
+
 const getMovies = function() {
   return moviesData;
 };
 
+var createUser = function({username, password, name}) {
+  name = !!name ? name : username
+  let user = {username, password, id: uuid(), name}
+  usersData.push(user)
+  let token = uuid()
+  return {token, user}
+};
+
 const resolvers = {
-    movies: getMovies
+    movies: getMovies,
+    createUser: createUser
 };
 
 module.exports = resolvers;
