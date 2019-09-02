@@ -1,5 +1,5 @@
 function User(id, username, password, name) {
-  this.id  = username;
+  this.id  = id;
   this.username  = username;
   this.password  = password;
   this.name = name || username;
