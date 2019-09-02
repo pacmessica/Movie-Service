@@ -1,28 +1,35 @@
 const uuid = require('uuid/v4');
 const User = require("./models/user");
+const bcrypt = require("bcrypt");
 
-var usersData = {
-};
-
-var sessionsData = {
-};
+var usersData = {};
+var sessionsData = {};
 
 const createNewUser = function({username, password, name}) {
   if (usersData[username]) {
     throw new Error("username already exists")
   }
   let id = uuid()
-  var user = new User(id, username, password, name);
-  // TODO encrypt password
+
+  encryptedPassword = bcrypt.hashSync(password, 12);
+  console.log("password",{encryptedPassword, password})
+  var user = new User(id, username, encryptedPassword, name);
+
   usersData[username] = user
   return user
 };
 
-const getUserByUsername = function({username}) {
+const loginUser = function({username, password}) {
   let user = usersData[username]
   if (!user) {
     throw new Error("user not found")
   }
+
+  let match = bcrypt.compareSync(password, user.password);
+  if (!match) {
+    throw new Error("incorrect password")
+  }
+
   return user
 };
 
@@ -31,7 +38,7 @@ const createUserSession = function({username}) {
   if (!user) {
     throw new Error("user not found")
   }
-  let token = uuid() // TODO make more secure
+  let token = uuid()
   sessionsData[token] = username
   return token
 };
@@ -49,4 +56,4 @@ const isValidToken = function({token}) {
   return true
 };
 
-module.exports = {getUserByUsername, createNewUser, createUserSession, isValidToken};
+module.exports = {loginUser, createNewUser, createUserSession, isValidToken};

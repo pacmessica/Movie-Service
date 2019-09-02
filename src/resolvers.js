@@ -1,8 +1,7 @@
-const {getUserByUsername, createNewUser, createUserSession} = require('./storage/user');
+const {loginUser, createNewUser, createUserSession} = require('./storage/user');
 const {getAllMovies} = require('./storage/movies');
 
 const getResolvers = function(request) {
-  console.log("[getResolvers]", request.isLoggedIn)
 
   const createUser = function({username, password, name}) {
     if (!username || !password) {
@@ -19,7 +18,7 @@ const getResolvers = function(request) {
       throw new Error("missing required field username or password")
     }
 
-    let user = getUserByUsername({username, password})
+    let user = loginUser({username, password})
     let token = createUserSession({username})
     return {token, user}
   };
