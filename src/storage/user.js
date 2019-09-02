@@ -13,6 +13,7 @@ const createNewUser = function({username, password, name}) {
   }
   let id = uuid()
   var user = new User(id, username, password, name);
+  // TODO encrypt password
   usersData[username] = user
   return user
 };
@@ -23,6 +24,16 @@ const getUserByUsername = function({username}) {
     throw new Error("user not found")
   }
   return user
+};
+
+const createUserSession = function({username}) {
+  let user = usersData[username]
+  if (!user) {
+    throw new Error("user not found")
+  }
+  let token = uuid() // TODO make more secure
+  sessionsData[username] = token
+  return token
 };
 
 // const isUserAuthenticated = function({token}) {
@@ -36,4 +47,4 @@ const getUserByUsername = function({username}) {
 //   return true
 // };
 
-module.exports = {getUserByUsername, createNewUser}
+module.exports = {getUserByUsername, createNewUser, createUserSession};

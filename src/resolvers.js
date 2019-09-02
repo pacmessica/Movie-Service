@@ -1,6 +1,5 @@
-const {getUserByUsername, createNewUser} = require('./storage/user')
-const {getAllMovies} = require('./storage/movies')
-const uuid = require('uuid/v4');
+const {getUserByUsername, createNewUser, createUserSession} = require('./storage/user');
+const {getAllMovies} = require('./storage/movies');
 
 const createUser = function({username, password, name}) {
   if (!username || !password) {
@@ -8,8 +7,7 @@ const createUser = function({username, password, name}) {
   }
 
   let user = createNewUser({username, password, name})
-  let token = uuid()
-  // TODO save token
+  let token = createUserSession({username})
   return {token, user}
 };
 
@@ -19,8 +17,7 @@ const login = function({username, password}) {
   }
 
   let user = getUserByUsername({username, password})
-  // TODO save token
-  let token = uuid()
+  let token = createUserSession({username})
   return {token, user}
 };
 
